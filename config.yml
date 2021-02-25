@@ -1,0 +1,11 @@
+log:
+  console:
+    enable: true
+    level: DEBUG
+  file:
+    enable: true
+
+token:
+  SECRET_KEY: 03a7adffec464fe03b402af83e5e429e1ed4b46b893f0ae25e8eb607fd6e2891
+  ALGORITHM: HS256
+  ACCESS_TOKEN_EXPIRE_MINUTES: 60
