@@ -23,5 +23,10 @@ predictions = probability_model.predict(test_images)
 index = 0
 print(f'prediction result is: {class_names[np.argmax(predictions[index])]}')
 print(f'ground truth is {class_names[test_labels[index]]}')
+for i in range(0, 3):
+    print(i, 'The model thought this was a {} (class {}), and it was actually a {} (class {})'.format(
+        class_names[np.argmax(predictions[i])],
+        np.argmax(predictions[i]), class_names[test_labels[i]],
+        test_labels[i]))
 
 print('use_time:', time.time() - s_time)

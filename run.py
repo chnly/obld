@@ -48,7 +48,7 @@ app.add_middleware(
 
 app.include_router(application, prefix='/users', tags=['用户注册'])
 app.include_router(app_token, prefix='/token', tags=['用户认证'])
-app.include_router(app_tf, prefix='/data', tags=['用户认证'])
+app.include_router(app_tf, prefix='/data', tags=['tf模型'])
 
 
 @app.get('/test')
