@@ -1,6 +1,6 @@
 import utils
 
-from users.main import get_users
+import users.main
 from users.models import User
 
 from typing import Optional
@@ -9,7 +9,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from jose import JWTError, jwt
-
 from users.utils import pwd_context
 
 app_token = APIRouter()
@@ -57,7 +56,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 @app_token.post("/", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = jwt_authenticate_user(db=get_users(), username=form_data.username, password=form_data.password)
+    user = jwt_authenticate_user(db=users.main.get_users(), username=form_data.username, password=form_data.password)
     if not user:
         raise HTTPException(
             status.HTTP_401_UNAUTHORIZED,
@@ -86,7 +85,7 @@ async def jwt_get_current_user(token: str = Depends(oauth2_schema)):
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = jwt_get_user(db=get_users(), username=username)
+    user = jwt_get_user(db=users.main.get_users(), username=username)
     if user is None:
         raise credentials_exception
     del user.hashed_password
@@ -96,3 +95,9 @@ async def jwt_get_current_user(token: str = Depends(oauth2_schema)):
 @app_token.get("/me")
 async def jwt_read_users_me(current_user: User = Depends(jwt_get_current_user)):
     return current_user
+
+
+def has_access(current_user: User = Depends(jwt_get_current_user)):
+    if current_user:
+        return True
+    return False

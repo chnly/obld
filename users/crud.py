@@ -53,7 +53,7 @@ def get_car(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Car).offset(skip).limit(limit).all()
 
 
-def create_user_car(db: Session, car: schemas.CarCreate, user_id: int):
+def create_user_car(db: Session, car: schemas.Car1Create, user_id: int):
     db_car = models.Car(**car.dict(), owner_id=user_id)
     db.add(db_car)
     db.commit()

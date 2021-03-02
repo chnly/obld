@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from users import crud, schemas, models
 from users.database import engine, Base, SessionLocal
 from users.models import User
+import users.authentication.jwt as jwt
 
 application = APIRouter()
 
@@ -60,7 +61,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-@application.put("/{user_id}", response_model=schemas.User)
+@application.put("/{user_id}", response_model=schemas.User, dependencies=[Depends(jwt.has_access)])
 def update_user(user_id: int, update_user: schemas.UserUpdate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_username(db, username=update_user.username)
     if db_user:
